@@ -1,15 +1,17 @@
 # Sagrario POS para Windows
 
-Instaladores oficiales distribuidos por la cuenta sistemascalc para El Sagrario Metropolitano.
+Descarga el instalador desde [la versión más reciente](https://github.com/sistemascalc/sagrario-pos-instaladores/releases/latest).
 
-Descarga el instalador .exe desde [la versión más reciente](https://github.com/sistemascalc/sagrario-pos-instaladores/releases/latest).
+# Sagrario POS 1.2.0
 
-## Versión 1.1.0
-- Menú Intenciones: abre el cuaderno existente y el formato del día.
-- Menú Impresoras: guarda una impresora de recibos de 80 mm y otra de intenciones en A4.
-- Actualizaciones: comprueba nuevas versiones al iniciar y cada cuatro horas; descarga en segundo plano e instala al cerrar.
-- Icono con el logotipo del Sagrario.
+## Autorización inicial por computadora
 
-La aplicación necesita internet y utiliza los sitios existentes. Este repositorio contiene únicamente instaladores y sus archivos de actualización; no contiene registros, contraseñas ni bases de datos.
+Al abrir por primera vez, la aplicación solicita una llave de acceso entregada por el administrador. Después de autorizar, la computadora y la cuenta de Windows conservan la autorización cifrada para los siguientes inicios y actualizaciones.
 
-La versión 1.0.0 requiere instalar manualmente la 1.1.0 una vez para activar las actualizaciones. Los instaladores todavía no cuentan con firma digital de editor.
+La llave privada se entrega por separado. No está incluida en este repositorio ni en el instalador.
+
+Se conservan las opciones de Intenciones, formato diario, impresoras independientes y actualizaciones automáticas.
+
+Este bloqueo corresponde a la aplicación de escritorio. Los permisos de los sitios web siguen siendo independientes. Las versiones anteriores no incluyen este bloqueo.
+
+Instalador para Windows de 64 bits. Todavía no cuenta con firma digital de editor.
