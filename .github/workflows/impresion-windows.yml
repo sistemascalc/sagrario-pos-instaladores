@@ -1,0 +1,56 @@
+name: Sagrario POS 1.2.1 · Impresión Windows
+on:
+  push:
+    branches: [main]
+    paths: ['release-tools/**', '.github/workflows/impresion-windows.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: sagrario-print-release
+  cancel-in-progress: false
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Probar impresión y actualización de Windows
+        shell: pwsh
+        run: ./release-tools/windows.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sagrario-pos-1.2.1
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/sg-release-121/installer/Sagrario-POS-Setup-1.2.1.exe
+            ${{ runner.temp }}/sg-release-121/installer/Sagrario-POS-Setup-1.2.1.exe.blockmap
+            ${{ runner.temp }}/sg-release-121/installer/latest.yml
+  publish:
+    needs: windows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: sagrario-pos-1.2.1
+          path: installer
+      - name: Publicar versión verificada
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag=v1.2.1
+          repo="$GITHUB_REPOSITORY"
+          if gh release view "$tag" --repo "$repo" >/dev/null 2>&1; then
+            test "$(gh release view "$tag" --repo "$repo" --json isDraft -q .isDraft)" = true
+          else
+            gh release create "$tag" --repo "$repo" --target "$GITHUB_SHA" --draft --title 'Sagrario POS 1.2.1 · Impresión de agenda e intenciones' --notes 'Corrige ERR_INVALID_URL (-300) al imprimir documentos extensos desde Windows. La agenda usa hoja carta, las intenciones A4 y los recibos 80 mm. Actualiza desde el menú Actualizaciones de Sagrario POS.'
+          fi
+          gh release upload "$tag" installer/* --repo "$repo" --clobber
+          gh release edit "$tag" --repo "$repo" --draft=false --latest
